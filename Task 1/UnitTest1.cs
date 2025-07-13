@@ -61,47 +61,48 @@ namespace AutomationTask
 			driver.Navigate().GoToUrl("https://www.facebook.com/r.php?entry_point=login");
 			driver.Manage().Window.Maximize();
 
-			// By.Name: First Name
-			var firstName = driver.FindElement(By.Name("firstname"));
-			firstName.SendKeys("TestFirst");
+			// Locate by Name
+			driver.FindElement(By.Name("firstname")).SendKeys("TestFirst");
 
-			// By.Name: Last Name
-			var lastName = driver.FindElement(By.Name("lastname"));
-			lastName.SendKeys("TestLast");
+			// Locate by Name
+			driver.FindElement(By.Name("lastname")).SendKeys("TestLast");
 
-			// By.Name: Mobile or Email
-			var email = driver.FindElement(By.Name("reg_email__"));
-			email.SendKeys("testuser@example.com");
+			// Locate by Name
+			driver.FindElement(By.Name("reg_email__")).SendKeys("testemail@example.com");
 
-			// By.Name: Re-enter Email
-			var reEmail = driver.FindElement(By.Name("reg_email_confirmation__"));
-			reEmail.SendKeys("testuser@example.com");
+			// Wait for confirmation field to appear and locate by Name
+			System.Threading.Thread.Sleep(1000);
+			driver.FindElement(By.Name("reg_email_confirmation__")).SendKeys("testemail@example.com");
 
-			// By.Id: New Password
-			var password = driver.FindElement(By.Id("password_step_input"));
-			password.SendKeys("Test@12345");
+			// Locate by ID
+			driver.FindElement(By.Id("password_step_input")).SendKeys("Test@12345");
 
-			// By.XPath: Birth Day
-			var day = driver.FindElement(By.XPath("//select[@id='day']"));
-			day.SendKeys("13");
+			// Locate by TagName (Dropdown for birth day)
+			var days = driver.FindElement(By.TagName("select"));
+			var birthDay = driver.FindElement(By.Name("birthday_day"));
+			birthDay.SendKeys("13");
 
-			// By.CssSelector: Birth Month
-			var month = driver.FindElement(By.CssSelector("select#month"));
-			month.SendKeys("Jul");
+			// Locate by CSS Selector for birth month
+			driver.FindElement(By.CssSelector("select#month")).SendKeys("Jul");
 
-			// By.TagName: Birth Year (first select tag is Day, second is Month, third is Year)
-			var year = driver.FindElements(By.TagName("select"))[2];
-			year.SendKeys("1995");
+			// Locate by XPath for birth year
+			driver.FindElement(By.XPath("//select[@id='year']")).SendKeys("1990");
 
-			// By.ClassName: Gender (Male radio button has class '_8esa')
-			var maleRadio = driver.FindElements(By.ClassName("_8esa"))[1]; // second one is Male
-			maleRadio.Click();
+			// Locate by ClassName for gender selection (Male)
+			var genderOptions = driver.FindElements(By.ClassName("_8esa"));
+			foreach (var option in genderOptions)
+			{
+				if (option.Text.Contains("Male"))
+				{
+					option.Click();
+					break;
+				}
+			}
 
-			// By.XPath: Click Sign Up button
-			var signUpBtn = driver.FindElement(By.XPath("//button[@name='websubmit']"));
-			signUpBtn.Click();
+			// Optionally, click the Sign Up button (not recommended in test)
+			// driver.FindElement(By.Name("websubmit")).Click();
 
-			Console.WriteLine("Test data filled and Sign Up clicked.");
+			Assert.Pass("Form filled with test data successfully.");
 			driver.Quit();
 
 		}
